@@ -1,0 +1,55 @@
+ {include file='common/header' /}
+<!--顶部通栏-->
+<?php 
+	if (isset($cate)) {
+
+		?>
+<div class="position"><a href="{:url('Index/index')}">主页</a> > <a href='#'>{$cate.catename}
+</a> > </div>
+<?php
+	}elseif (isset($key)){
+		?>
+	<div class="position">关键字：<span style="color:red;">{$key}</span></div>
+
+<?php
+	}
+ ?>
+	<div class="overall">
+		<div class="left">
+
+		{if ($data->total() == 0)}
+			<div class="xnews2">
+			<p style="font-size:30px;text-align:center;">没有相关内容</p>
+			</div>
+		{/if}
+			{foreach $data as $v}
+			<div class="xnews2">
+				<div class="pic">
+					<a target="_blank" href="{:url('index/Article/index',['id'=>$v.id])}">
+			{if condition="$v.pic neq ''"}
+			<img src="{$v.pic}" width='232px' height='200px' alt="{$v.title}"/>
+			{else /}
+			<!-- 没有图片就显示默认图片 -->
+			<img src="__STATIC__/Index/images/57-1609201149550-L.jpg" width='232px' height='200px' alt="{$v.title}"/>
+			{/if}
+			</a></div>
+				<div class="dec">
+					<h3><a target="_blank" href="{:url('index/Article/index',['id'=>$v.id])}">{$v.title}</a></h3>
+					<div class="time">发布时间：{$v.time|date = 'Y-m-d H:i:s',###}</div>
+					<p>{$v.desc}</p>
+					<?php 
+					$keywords = $v['keywords'];
+					$keywords = explode(',',$keywords);
+				 ?>
+					<div class="time">
+						{foreach $keywords as $k}
+						<a href="{:url('index/Lst/key',['key'=>$k])}">{$k}</a> {/foreach}
+					</div>
+				</div>
+			</div>
+			{/foreach} {$data->render();}
+		</div>
+		<!-- 热门点击、推荐阅读、搜索 -->
+		{include file='common/right' /}
+	</div>
+	{include file='common/footer' /}
